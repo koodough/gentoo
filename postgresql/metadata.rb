@@ -18,4 +18,5 @@ end
   supports el, ">= 6.0"
 end
 
-depends "openssl", "gentoo"
+depends "openssl"
+depends "gentoo"
