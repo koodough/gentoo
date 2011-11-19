@@ -1,4 +1,5 @@
 include_recipe "gentoo::portage"
+include_recipe "gentoo::portage_sync"
 
 template "/etc/conf.d/clock" do
   source "clock.confd.erb"
