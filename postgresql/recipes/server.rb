@@ -37,6 +37,8 @@ end
 # Include the right "family" recipe for installing the server
 # since they do things slightly differently.
 case node.platform
+when "gentoo"
+  include_recipe "postgresql::server_gentoo"
 when "redhat", "centos", "fedora", "suse", "scientific", "amazon"
   include_recipe "postgresql::server_redhat"
 when "debian", "ubuntu"
