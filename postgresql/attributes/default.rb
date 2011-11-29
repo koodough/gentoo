@@ -19,7 +19,7 @@
 
 case platform
 when "gentoo"
-  default[:postgresql][:version] = "9.0.1"
+  default[:postgresql][:version] = "9.1.1"
   set[:postgresql][:dir] = "/var/db/postgresql/#{node[:postgresql][:version]}/data"
 when "debian"
 
