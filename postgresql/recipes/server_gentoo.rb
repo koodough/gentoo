@@ -27,18 +27,17 @@ else # > 8.3
   node.default[:postgresql][:ssl] = "true"
 end
 
-package "postgresql"
+package "postgresql-server" do
+  action :upgrade
+end
 
 service "postgresql" do
-  service_name "postgresql-#{node['postgresql']['version']}"
+  service_name "postgresql-#{node[:postgresql][:version][0..2]}"
   supports :restart => true, :status => true, :reload => true
   action :nothing
 end
 
-template "#{node[:postgresql][:dir]}/postgresql.conf" do
-  source "gentoo.postgresql.conf.erb"
-  owner "postgres"
-  group "postgres"
-  mode 0600
-  notifies :restart, resources(:service => "postgresql")
+execute "configure database" do
+  user "root"
+  command "echo 'y' | emerge --config =dev-db/postgresql-server-#{node[:postgresql][:version]}"
 end

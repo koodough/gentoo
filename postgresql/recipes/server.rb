@@ -19,8 +19,14 @@
 # limitations under the License.
 #
 
-::Chef::Recipe.send(:include, Opscode::OpenSSL::Password)
-
+if Chef::Config[:solo]
+  def secure_password
+    o =  [('a'..'z'),('A'..'Z')].map{|i| i.to_a}.flatten
+    (0..50).map{ o[rand(o.length)] }.join
+  end
+else
+  ::Chef::Recipe.send(:include, Opscode::OpenSSL::Password)
+end
 include_recipe "postgresql::client"
 
 # randomly generate postgres password
@@ -45,12 +51,21 @@ when "debian", "ubuntu"
   include_recipe "postgresql::server_debian"
 end
 
-template "#{node[:postgresql][:dir]}/pg_hba.conf" do
+template "#{node[:postgresql][:conf_dir]}/pg_hba.conf" do
   source "pg_hba.conf.erb"
   owner "postgres"
   group "postgres"
   mode 0600
   notifies :reload, resources(:service => "postgresql"), :immediately
+end
+
+bash "run-postgres-server" do
+  user 'root'
+  code <<-EOH
+/etc/init.d/postgresql-#{node[:postgresql][:version][0..2]} start
+rc-update add postgresql-#{node[:postgresql][:version][0..2]} default
+  EOH
+  action :run
 end
 
 # Default PostgreSQL install has 'ident' checking on unix user 'postgres'

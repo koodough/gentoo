@@ -20,7 +20,8 @@
 case platform
 when "gentoo"
   default[:postgresql][:version] = "9.1.1"
-  set[:postgresql][:dir] = "/var/db/postgresql/#{node[:postgresql][:version]}/data"
+  set[:postgresql][:dir] = "/var/db/postgresql/#{node[:postgresql][:version][0..2]}/data"
+  set[:postgresql][:conf_dir] = "/etc/postgresql-#{node[:postgresql][:version][0..2]}"
 when "debian"
 
   if platform_version.to_f == 5.0
@@ -73,3 +74,5 @@ else
   default[:postgresql][:version] = "8.4"
   set[:postgresql][:dir]         = "/etc/postgresql/#{node[:postgresql][:version]}/main"
 end
+
+set[:postgresql][:conf_dir] ||= set[:postgresql][:dir]
