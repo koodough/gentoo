@@ -41,3 +41,11 @@ execute "configure database" do
   user "root"
   command "echo 'y' | emerge --config =dev-db/postgresql-server-#{node[:postgresql][:version]}"
 end
+
+template "#{node[:postgresql][:conf_dir]}/postgresql.conf" do
+  source "gentoo.postgresql.conf.erb"
+  owner "postgres"
+  group "postgres"
+  mode 0600
+  notifies :restart, resources(:service => "postgresql")
+end
