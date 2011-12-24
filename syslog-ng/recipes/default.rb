@@ -11,7 +11,7 @@ end
 
 service "syslog-ng" do
   supports :status => true, :restart => true, :reload => true
-  action [:enable, :start]
+  action [:enable]
   subscribes :restart, resources(:package => "app-admin/syslog-ng")
 end
 

@@ -4,7 +4,7 @@ end
 
 service "vixie-cron" do
   supports :status => true, :restart => true
-  action [:enable, :start]
+  action [:enable]
   subscribes :restart, resources(:package => "sys-process/vixie-cron")
 end
 
