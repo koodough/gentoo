@@ -68,11 +68,6 @@ template "/etc/locale.gen" do
   notifies :run, resources(:execute => "locale-gen")
 end
 
-execute "sysctl_reload" do
-  command "/sbin/sysctl -p /etc/sysctl.conf"
-  action :nothing
-end
-
 template "/etc/sysctl.conf" do
   source "sysctl.conf.erb"
   owner "root"
@@ -83,7 +78,6 @@ template "/etc/sysctl.conf" do
     :domain => node[:domain],
     :sysctl_variables => node[:gentoo][:sysctl]
   )
-  notifies :run, resources(:execute => "sysctl_reload")
 end
 
 # TODO test hardened configs
