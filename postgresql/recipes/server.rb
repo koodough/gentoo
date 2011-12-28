@@ -4,6 +4,8 @@
 #
 # Author:: Joshua Timberman (<joshua@opscode.com>)
 # Author:: Lamont Granquist (<lamont@opscode.com>)
+# Author:: Marcin Nowicki (<pr0d1r2@gmail.com>)
+#
 # Copyright 2009-2011, Opscode, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -40,15 +42,27 @@ when "8.4"
   node.default[:postgresql][:ssl] = "true"
 end
 
-# Include the right "family" recipe for installing the server
-# since they do things slightly differently.
-case node.platform
-when "gentoo"
-  include_recipe "postgresql::server_gentoo"
-when "redhat", "centos", "fedora", "suse", "scientific", "amazon"
-  include_recipe "postgresql::server_redhat"
-when "debian", "ubuntu"
-  include_recipe "postgresql::server_debian"
+package "postgresql-server" do
+  action :upgrade
+end
+
+service "postgresql" do
+  service_name "postgresql-#{node[:postgresql][:version][0..2]}"
+  supports :restart => true, :status => true, :reload => true
+  action :nothing
+end
+
+execute "configure database" do
+  user "root"
+  command "echo 'y' | emerge --config =dev-db/postgresql-server-#{node[:postgresql][:version]}"
+end
+
+template "#{node[:postgresql][:conf_dir]}/postgresql.conf" do
+  source "gentoo.postgresql.conf.erb"
+  owner "postgres"
+  group "postgres"
+  mode 0600
+  notifies :restart, resources(:service => "postgresql")
 end
 
 template "#{node[:postgresql][:conf_dir]}/pg_hba.conf" do

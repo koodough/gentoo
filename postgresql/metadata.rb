@@ -7,16 +7,6 @@ version           "0.99.0"
 recipe            "postgresql", "Includes postgresql::client"
 recipe            "postgresql::client", "Installs postgresql client package(s)"
 recipe            "postgresql::server", "Installs postgresql server packages, templates"
-recipe            "postgresql::server_redhat", "Installs postgresql server packages, redhat family style"
-recipe            "postgresql::server_debian", "Installs postgresql server packages, debian family style"
-
-%w{ ubuntu debian fedora suse }.each do |os|
-  supports os
-end
-
-%w{redhat centos scientific}.each do |el|
-  supports el, ">= 6.0"
-end
 
 depends "openssl"
 depends "gentoo"
