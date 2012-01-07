@@ -39,8 +39,8 @@ GENTOO_MIRRORS="<%= @distfile_mirrors.uniq.join(" ") %>"
 PORTAGE_BINHOST="<%= @portage_binhost %>"
 <% end -%>
 
-<%- if node[:extra_make_conf_variables] %>
-<%- node[:extra_make_conf_variables].each do |variable, attributes| %>
+<%- if @extra_make_conf_variables %>
+<%- @extra_make_conf_variables.each do |variable, attributes| %>
 <%= variable %>="<%= attributes.sort.uniq.join(" ") %>"
 <%- end %>
 <%- end %>
