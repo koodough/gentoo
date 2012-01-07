@@ -23,7 +23,8 @@ define :generate_make_conf do
       :elog_mailfrom => node[:gentoo][:elog_mailfrom],
       :rsync_mirror => node[:gentoo][:rsync_mirror],
       :distfile_mirrors => [node[:gentoo][:distfile_mirrors]].flatten,
-      :portage_binhost => node[:gentoo][:portage_binhost]
+      :portage_binhost => node[:gentoo][:portage_binhost],
+      :extra_make_conf_variables => node[:gentoo][:extra_make_conf_variables]
     )
   end
 end
