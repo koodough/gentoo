@@ -14,7 +14,7 @@ default[:gentoo][:use_flags] = [
 ]
 
 default[:gentoo][:cflags] = "-march=native -O2 -pipe"
-default[:gentoo][:makeopts] = "-j#{node[:cpu][:total].to_i+1}"
+default[:gentoo][:makeopts] = "-j#{(node[:cpu][:total].to_i*2)+1}"
 
 default[:gentoo][:portage_features] = %w(sandbox sfperms strict buildpkg parallel-fetch)
 default[:gentoo][:emerge_options] = ["--verbose"] # + ["--jobs=3", "--load-average=3"]
