@@ -5,7 +5,6 @@ end
 service "vixie-cron" do
   supports :status => true, :restart => true
   action [:enable]
-  subscribes :restart, resources(:package => "sys-process/vixie-cron")
 end
 
 if node.run_list?("recipe[monit]")
