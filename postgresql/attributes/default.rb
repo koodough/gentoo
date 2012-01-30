@@ -18,7 +18,7 @@
 #
 
 default[:postgresql][:version] = "9.1.1"
-set[:postgresql][:dir] = "/var/db/postgresql/#{node[:postgresql][:version][0..2]}/data"
+set[:postgresql][:dir] = "/var/lib/postgresql/#{node[:postgresql][:version][0..2]}/data"
 set[:postgresql][:conf_dir] = "/etc/postgresql-#{node[:postgresql][:version][0..2]}"
 
 set[:postgresql][:conf_dir] ||= set[:postgresql][:dir]
