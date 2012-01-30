@@ -43,7 +43,7 @@ when "8.4"
 end
 
 package "postgresql-server" do
-  action :upgrade
+  action :install
 end
 
 service "postgresql" do
