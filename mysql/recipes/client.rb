@@ -1,8 +1,8 @@
 include_recipe "password"
 include_recipe "gentoo::portage"
 
-unless node[:gentoo][:use_flags].include?("mysql")
-  node[:gentoo][:use_flags] << "mysql"
+unless node["gentoo"]["use_flags"].include?("mysql")
+  node["gentoo"]["use_flags"] << "mysql"
   generate_make_conf "added mysql USE flag"
 end
 
@@ -23,13 +23,13 @@ gentoo_package "dev-ruby/mysql-ruby" do
   action :upgrade
 end
 
-# set node[:mysql][:root_password] to "" and we'll generate and store the
+# set node["mysql"]["root_password"] to "" and we'll generate and store the
 # mysql root password locally
-mysql_root_password = if node[:mysql][:root_password] == ""
-  # node[:mysql][:root_password] = Opscode::Password.get("mysql/root")
+mysql_root_password = if node["mysql"]["root_password"] == ""
+  # node["mysql"]["root_password"] = Opscode::Password.get("mysql/root")
   get_password("mysql/root")
 else
-  node[:mysql][:root_password]
+  node["mysql"]["root_password"]
 end
 
 template "/root/.my.cnf" do
@@ -38,8 +38,8 @@ template "/root/.my.cnf" do
   group "root"
   mode "0600"
   variables(
-    :host => node[:mysql][:server_address],
+    :host => node["mysql"]["server_address"],
     :password => mysql_root_password,
-    :encoding => node[:mysql][:encoding]
+    :encoding => node["mysql"]["encoding"]
   )
 end

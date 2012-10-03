@@ -2,7 +2,7 @@ include_recipe "mysql::client"
 include_recipe "gentoo::portage"
 
 gentoo_package_use "dev-db/mysql latin1" do
-  action node[:mysql][:encoding] == "latin1" ? :create : :delete
+  action node["mysql"]["encoding"] == "latin1" ? :create : :delete
 end
 
 package "dev-db/mysql" do
@@ -16,12 +16,12 @@ template "/etc/mysql/my.cnf" do
   group "root"
   mode "0600"
   variables(
-    :encoding => node[:mysql][:encoding],
-    :server_mode => node[:mysql][:server][:mode],
-    :server_id => node[:mysql][:server][:id],
-    :bind_address => node[:mysql][:server][:bind_address],
-    :max_connections => node[:mysql][:server][:max_connections],
-    :mysqld_variables => node[:mysql][:server][:mysqld_variables]
+    :encoding => node["mysql"]["encoding"],
+    :server_mode => node["mysql"]["server"]["mode"],
+    :server_id => node["mysql"]["server"]["id"],
+    :bind_address => node["mysql"]["server"]["bind_address"],
+    :max_connections => node["mysql"]["server"]["max_connections"],
+    :mysqld_variables => node["mysql"]["server"]["mysqld_variables"]
   )
 end
 
@@ -42,7 +42,7 @@ mysql_database "test" do
 end
 
 if node.run_list?("recipe[iptables]")
-  ips = [node[:mysql][:client_ips]].flatten.select { |i| i != "127.0.0.1" }
+  ips = [node["mysql"]["client_ips"]].flatten.select { |i| i != "127.0.0.1" }
   iptables_rule "mysql" do
     variables(:ips => ips)
     action !ips.empty? ? :create : :delete
@@ -51,7 +51,7 @@ end
 
 if node.run_list?("recipe[monit]")
   monit_check "mysql" do
-    variables(:bind_address => node[:mysql][:server][:bind_address])
+    variables(:bind_address => node["mysql"]["server"]["bind_address"])
   end
 end
 
