@@ -2,14 +2,18 @@ include_recipe "openssh"
 
 known_keys = {}
 
-search(:node, "*:*") do |n|
-  begin
-    # TODO ignore RFC 1918 IP addresses on different LANs
-    known_keys[n['keys']['ssh']['host_rsa_public']] ||= []
-    known_keys[n['keys']['ssh']['host_rsa_public']] += [n['ipaddress'], n['hostname'], n['fqdn'], n['dns_alias']]
-  rescue NoMethodError => e
-    # empty nodes don't have attributes so we will get a NoMethodError error
-    # for using nil[]
+if Chef::Config[:solo]
+  Chef::Log.warn("This recipe uses search. Chef Solo does not support search.")
+else
+  search(:node, "*:*") do |n|
+    begin
+      # TODO ignore RFC 1918 IP addresses on different LANs
+      known_keys[n['keys']['ssh']['host_rsa_public']] ||= []
+      known_keys[n['keys']['ssh']['host_rsa_public']] += [n['ipaddress'], n['hostname'], n['fqdn'], n['dns_alias']]
+    rescue NoMethodError => e
+      # empty nodes don't have attributes so we will get a NoMethodError error
+      # for using nil[]
+    end
   end
 end
 
