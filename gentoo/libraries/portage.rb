@@ -32,7 +32,7 @@ module Opscode
 
           if action == :create
             if !::File.exists?(package_foo_path) || foo_data.strip != ::File.read(package_foo_path).strip
-              ::File.open("#{package_foo_path}", "w") { |f| f << foo_data + "\n" }
+              ::File.open(package_foo_path, "w") { |f| f << foo_data + "\n" }
               Chef::Log.info("Created package.#{foo_category} \"#{foo_data}\".")
               true
             end
