@@ -1,7 +1,7 @@
 include_recipe "gentoo::portage"
 
-unless node[:gentoo][:use_flags].include?("snmp")
-  node[:gentoo][:use_flags] << "snmp"
+unless node['gentoo']['use_flags'].include?("snmp")
+  node['gentoo']['use_flags'] << "snmp"
   generate_make_conf "added snmp USE flag"
 end
 
@@ -17,12 +17,12 @@ template "/etc/snmp/snmpd.conf" do
   group "root"
   mode "0600"
   variables(
-    :monitoring_ips => [node[:snmpd][:monitoring_ips]].flatten,
-    :community => node[:snmpd][:community],
-    :syslocation => node[:snmpd][:syslocation],
-    :syscontact => node[:snmpd][:syscontact],
-    :execs => [node[:snmpd][:execs]].flatten,
-    :disks => [node[:snmpd][:disks]].flatten
+    :monitoring_ips => [node['snmpd']['monitoring_ips']].flatten,
+    :community => node['snmpd']['community'],
+    :syslocation => node['snmpd']['syslocation'],
+    :syscontact => node['snmpd']['syscontact'],
+    :execs => [node['snmpd']['execs']].flatten,
+    :disks => [node['snmpd']['disks']].flatten
   )
 end
 
@@ -41,7 +41,7 @@ service "snmpd" do
 end
 
 if node.run_list?("recipe[iptables]")
-  ips = [node[:snmpd][:monitoring_ips]].flatten.select { |i| i != "127.0.0.1" }
+  ips = [node['snmpd']['monitoring_ips']].flatten.select { |i| i != "127.0.0.1" }
   iptables_rule "snmpd" do
     variables(:external_monitoring_ips => ips)
     action !ips.empty? ? :create : :delete

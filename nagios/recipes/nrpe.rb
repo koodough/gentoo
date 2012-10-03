@@ -1,6 +1,6 @@
 gentoo_package "net-analyzer/nagios-plugins" do
   action :upgrade
-  use node[:nagios][:nrpe][:use]
+  use node['nagios']['nrpe']['use']
 end
 
 package "net-analyzer/nagios-nrpe" do
@@ -28,8 +28,8 @@ template "/etc/nagios/nrpe.cfg" do
   group "nagios"
   mode "0640"
   variables(
-    :monitoring_ips => [node[:nagios][:nrpe][:monitoring_ips]].flatten,
-    :commands => node[:nagios][:nrpe][:commands]
+    :monitoring_ips => [node['nagios']['nrpe']['monitoring_ips']].flatten,
+    :commands => node['nagios']['nrpe']['commands']
   )
 end
 
@@ -50,11 +50,11 @@ end
 nrpe_command "load"
 nrpe_command "procs_default"
 nrpe_command "time" do
-  variables(:ntp_host => node[:ntpd][:pool] || "pool.ntp.org")
+  variables(:ntp_host => node['ntpd']['pool'] || "pool.ntp.org")
 end
 
 if node.run_list?("recipe[iptables]")
-  external_ips = [node[:nagios][:nrpe][:monitoring_ips]].flatten - ["127.0.0.1"]
+  external_ips = [node['nagios']['nrpe']['monitoring_ips']].flatten - ["127.0.0.1"]
   iptables_rule "nrpe" do
     variables(:ips => external_ips)
   end

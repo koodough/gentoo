@@ -2,8 +2,8 @@ class Chef::Recipe
   include Opscode::Password
 end
 
-unless node[:password][:directory].to_s == ""
-  directory node[:password][:directory] do
+unless node['password']['directory'].to_s == ""
+  directory node['password']['directory'] do
     owner "root"
     group "root"
     mode "0700"

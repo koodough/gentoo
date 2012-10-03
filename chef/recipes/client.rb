@@ -23,7 +23,7 @@ package "app-admin/chef" do
 end
 
 if node.run_list?("recipe[chef::server]")
-  node[:chef][:client][:server_url] = "http://127.0.0.1:4000"
+  node['chef']['client']['server_url'] = "http://127.0.0.1:4000"
 else
   file "/etc/chef/validation.pem" do
     action :delete
@@ -32,7 +32,7 @@ else
   end
 end
 
-if %w(yes true on 1).include?(node[:chef][:syslog].to_s)
+if %w(yes true on 1).include?(node['chef']['syslog'].to_s)
   gentoo_package "dev-ruby/SyslogLogger" do
     action :upgrade
     keywords "=dev-ruby/SyslogLogger-1.4.0"
@@ -55,8 +55,8 @@ template "/etc/chef/client.rb" do
   group "root"
   mode "0644"
   variables(
-    :chef_server_url => node[:chef][:client][:server_url],
-    :syslog => node[:chef][:syslog]
+    :chef_server_url => node['chef']['client']['server_url'],
+    :syslog => node['chef']['syslog']
   )
   notifies :create, resources(:ruby_block => "reload_client_config")
 end
@@ -82,7 +82,7 @@ end
 
 if node.run_list?("recipe[monit]")
   monit_check "chef-client" do
-    variables(:to => node[:monit][:alert_mail_to])
+    variables(:to => node['monit']['alert_mail_to'])
   end
 end
 

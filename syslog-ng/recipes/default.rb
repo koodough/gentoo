@@ -1,7 +1,7 @@
 include_recipe "gentoo::portage"
 
-unless node[:gentoo][:use_flags].include?("syslog")
-  node[:gentoo][:use_flags] << "syslog"
+unless node['gentoo']['use_flags'].include?("syslog")
+  node['gentoo']['use_flags'] << "syslog"
   generate_make_conf "added syslog USE flag"
 end
 
@@ -11,7 +11,7 @@ end
 
 service "syslog-ng" do
   supports :status => true, :restart => true, :reload => true
-  action [:enable]
+  action ['enable']
   subscribes :restart, resources(:package => "app-admin/syslog-ng")
 end
 

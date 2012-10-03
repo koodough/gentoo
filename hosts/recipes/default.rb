@@ -1,14 +1,14 @@
 # "inspired by" http://blog.bitfluent.com/post/196658820/using-chef-server-indexes-as-a-simple-dns
 
 # TODO deal with machines that have multiple public IP addresses
-localips = [node[:ipaddress]]
+localips = [node['ipaddress']]
 
 hosts = {}
 
 search(:node, "*:*") do |n|
-  unless n[:ipaddress].nil?
+  unless n['ipaddress'].nil?
     # TODO ignore RFC 1918 IP addresses on different LANs
-    hosts[n[:ipaddress]] = [n[:hostname], n[:fqdn], n[:dns_aliases]]
+    hosts[n['ipaddress']] = [n['hostname'], n['fqdn'], n['dns_aliases']]
   end
 end
 
@@ -31,7 +31,7 @@ rescue Net::HTTPServerException => e
 end
 
 localhosts = [
-  node[:fqdn], node[:hostname], "localhost", node[:dns_aliases]
+  node['fqdn'], node['hostname'], "localhost", node['dns_aliases']
 ].flatten.compact.uniq
 
 template "/etc/hosts" do

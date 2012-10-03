@@ -21,7 +21,7 @@
 # limitations under the License.
 #
 
-if Chef::Config[:solo]
+if Chef::Config['solo']
   def secure_password
     o =  [('a'..'z'),('A'..'Z')].map{|i| i.to_a}.flatten
     (0..50).map{ o[rand(o.length)] }.join
@@ -32,14 +32,14 @@ end
 include_recipe "postgresql::client"
 
 # randomly generate postgres password
-node.set_unless[:postgresql][:password][:postgres] = secure_password
-node.save unless Chef::Config[:solo]
+node.set_unless['postgresql']['password']['postgres'] = secure_password
+node.save unless Chef::Config['solo']
 
-case node[:postgresql][:version]
+case node['postgresql']['version']
 when "8.3"
-  node.default[:postgresql][:ssl] = "off"
+  node.default['postgresql']['ssl'] = "off"
 when "8.4"
-  node.default[:postgresql][:ssl] = "true"
+  node.default['postgresql']['ssl'] = "true"
 end
 
 package "postgresql-server" do
@@ -47,17 +47,17 @@ package "postgresql-server" do
 end
 
 service "postgresql" do
-  service_name "postgresql-#{node[:postgresql][:version][0..2]}"
+  service_name "postgresql-#{node['postgresql']['version'][0..2]}"
   supports :restart => true, :status => true, :reload => true
   action :nothing
 end
 
 execute "configure database" do
   user "root"
-  command "echo 'y' | emerge --config =dev-db/postgresql-server-#{node[:postgresql][:version]}"
+  command "echo 'y' | emerge --config =dev-db/postgresql-server-#{node['postgresql']['version']}"
 end
 
-template "#{node[:postgresql][:conf_dir]}/postgresql.conf" do
+template "#{node['postgresql']['conf_dir']}/postgresql.conf" do
   source "gentoo.postgresql.conf.erb"
   owner "postgres"
   group "postgres"
@@ -65,7 +65,7 @@ template "#{node[:postgresql][:conf_dir]}/postgresql.conf" do
   notifies :restart, resources(:service => "postgresql")
 end
 
-template "#{node[:postgresql][:conf_dir]}/pg_hba.conf" do
+template "#{node['postgresql']['conf_dir']}/pg_hba.conf" do
   source "pg_hba.conf.erb"
   owner "postgres"
   group "postgres"
@@ -76,8 +76,8 @@ end
 bash "run-postgres-server" do
   user 'root'
   code <<-EOH
-/etc/init.d/postgresql-#{node[:postgresql][:version][0..2]} start
-rc-update add postgresql-#{node[:postgresql][:version][0..2]} default
+/etc/init.d/postgresql-#{node['postgresql']['version'][0..2]} start
+rc-update add postgresql-#{node['postgresql']['version'][0..2]} default
   EOH
   action :run
 end
@@ -89,7 +89,7 @@ end
 bash "assign-postgres-password" do
   user 'postgres'
   code <<-EOH
-echo "ALTER ROLE postgres ENCRYPTED PASSWORD '#{node[:postgresql][:password][:postgres]}';" | psql
+echo "ALTER ROLE postgres ENCRYPTED PASSWORD '#{node['postgresql']['password']['postgres']}';" | psql
   EOH
   not_if do
     begin

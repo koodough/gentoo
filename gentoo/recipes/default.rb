@@ -6,18 +6,18 @@ template "/etc/conf.d/clock" do
   group "root"
   mode "0644"
   variables(
-    :hwtimezone => node[:gentoo][:hwtimezone] == "UTC" ? "UTC" : "local",
-    :timezone => node[:gentoo][:timezone],
-    :synchwclock => node[:gentoo][:synchwclock]
+    :hwtimezone => node['gentoo']['hwtimezone'] == "UTC" ? "UTC" : "local",
+    :timezone => node['gentoo']['timezone'],
+    :synchwclock => node['gentoo']['synchwclock']
   )
 end
 
-if File.exists?("/usr/share/zoneinfo/#{node[:gentoo][:timezone]}")
+if File.exists?("/usr/share/zoneinfo/#{node['gentoo']['timezone']}")
   link "/etc/localtime" do
-    to "/usr/share/zoneinfo/#{node[:gentoo][:timezone]}"
+    to "/usr/share/zoneinfo/#{node['gentoo']['timezone']}"
   end
 else
-  Chef::Log.warn("Invalid timezone: \"#{node[:gentoo][:timezone]}\"")
+  Chef::Log.warn("Invalid timezone: \"#{node['gentoo']['timezone']}\"")
 end
 
 template "/etc/conf.d/hostname" do
@@ -25,7 +25,7 @@ template "/etc/conf.d/hostname" do
   owner "root"
   group "root"
   mode "0644"
-  variables(:hostname => node[:hostname])
+  variables(:hostname => node['hostname'])
 end
 
 cookbook_file "/etc/securetty" do
@@ -63,7 +63,7 @@ template "/etc/locale.gen" do
   owner "root"
   group "root"
   mode "0644"
-  variables(:locales => node[:gentoo][:locales])
+  variables(:locales => node['gentoo']['locales'])
   notifies :run, resources(:execute => "locale-gen")
 end
 
@@ -73,11 +73,11 @@ template "/etc/sysctl.conf" do
   group "root"
   mode "0644"
   variables(
-    :hostname => node[:hostname],
-    :domain => node[:domain],
-    :sysctl_variables => node[:gentoo][:sysctl]
+    :hostname => node['hostname'],
+    :domain => node['domain'],
+    :sysctl_variables => node['gentoo']['sysctl']
   )
 end
 
 # TODO test hardened configs
-include_recipe "gentoo::hardened" if node[:gentoo][:profile] =~ /hardened/
+include_recipe "gentoo::hardened" if node['gentoo']['profile'] =~ /hardened/

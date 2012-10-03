@@ -11,14 +11,14 @@ module Opscode
 
     def get_password(key, length = 42)
 
-      #Chef::Log.debug("get_password called for key \"#{key}\" with password directory \"#{node[:password][:directory]}\"")
+      #Chef::Log.debug("get_password called for key \"#{key}\" with password directory \"#{node['password']['directory']}\"")
 
-      # we don't persist the password if node[:password][:directory] is unset
-      return secure_random(length) if node[:password][:directory].to_s == ""
+      # we don't persist the password if node['password']['directory'] is unset
+      return secure_random(length) if node['password']['directory'].to_s == ""
 
       password_file = File.expand_path(
         key.gsub(/[^a-z0-9\.\-\_\/]/i, "_").sub(/^\.+/, '_'),
-        node[:password][:directory]
+        node['password']['directory']
       )
 
       #Chef::Log.debug("Password file for \"#{key}\" is \"#{password_file}\"")

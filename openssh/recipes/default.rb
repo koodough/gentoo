@@ -8,10 +8,10 @@ template "/etc/ssh/sshd_config" do
   group "root"
   mode "0600"
   variables(
-    :port => node[:sshd][:port],
-    :permit_root_login => node[:sshd][:permit_root_login],
-    :password_auth => node[:sshd][:password_auth],
-    :allow_users => [node[:sshd][:allow_users]].flatten
+    :port => node['sshd']['port'],
+    :permit_root_login => node['sshd']['permit_root_login'],
+    :password_auth => node['sshd']['password_auth'],
+    :allow_users => [node['sshd']['allow_users']].flatten
   )
 end
 
@@ -24,18 +24,18 @@ end
 
 if node.run_list?("recipe[iptables]")
   iptables_rule "sshd" do
-    variables(:sshd_port => node[:sshd][:port])
+    variables(:sshd_port => node['sshd']['port'])
   end
 end
 
 if node.run_list?("recipe[monit]")
   monit_check "sshd" do
-    variables(:sshd_port => node[:sshd][:port])
+    variables(:sshd_port => node['sshd']['port'])
   end
 end
 
 if node.run_list?("recipe[nagios::nrpe]")
   nrpe_command "sshd" do
-    variables(:sshd_port => node[:sshd][:port])
+    variables(:sshd_port => node['sshd']['port'])
   end
 end

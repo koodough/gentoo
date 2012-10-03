@@ -1,1 +1,1 @@
-default[:password][:directory] = ""
+default['password']['directory'] = ""

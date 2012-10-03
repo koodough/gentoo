@@ -8,8 +8,8 @@ template "/etc/ntpd.conf" do
   group "root"
   mode "0600"
   variables(
-    :listen_on => [node[:ntpd][:listen_on]].flatten,
-    :pool => node[:ntpd][:pool]
+    :listen_on => [node['ntpd']['listen_on']].flatten,
+    :pool => node['ntpd']['pool']
   )
 end
 
@@ -21,7 +21,7 @@ end
 
 if node.run_list?("recipe[iptables]")
   iptables_rule "ntpd" do
-    action node[:ntpd][:listen_on].empty? ? :delete : :create
+    action node['ntpd']['listen_on'].empty? ? :delete : :create
   end
 end
 

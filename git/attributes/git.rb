@@ -1,2 +1,2 @@
-default[:git][:client][:subverson] = false
-default[:git][:client][:cvs] = false
+default['git']['client']['subverson'] = false
+default['git']['client']['cvs'] = false

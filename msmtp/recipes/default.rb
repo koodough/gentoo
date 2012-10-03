@@ -12,10 +12,10 @@ template "/etc/msmtprc" do
   group "root"
   mode "0644"
   variables(
-    :smtp_host => node[:msmtp][:host],
-    :domain => node[:fqdn],
-    :smtp_from => node[:msmtp][:from],
-    :smtp_user => node[:msmtp][:user],
-    :smtp_password => node[:msmtp][:password]
+    :smtp_host => node['msmtp']['host'],
+    :domain => node['fqdn'],
+    :smtp_from => node['msmtp']['from'],
+    :smtp_user => node['msmtp']['user'],
+    :smtp_password => node['msmtp']['password']
   )
 end

@@ -1,13 +1,13 @@
 include_recipe "gentoo::portage"
 
-missing_global_use_flags = %w(hardened pie pic) - node[:gentoo][:use_flags]
+missing_global_use_flags = %w(hardened pie pic) - node['gentoo']['use_flags']
 
 unless missing_global_use_flags.empty?
-  node[:gentoo][:use_flags] += missing_global_use_flags
+  node['gentoo']['use_flags'] += missing_global_use_flags
 end
 
-unless node[:gentoo][:profile] =~ /hardened/
-  Chef::Log.error("\"node[:gentoo][:profile]\" isn't a hardened profile!")
+unless node['gentoo']['profile'] =~ /hardened/
+  Chef::Log.error("\"node['gentoo']['profile']\" isn't a hardened profile!")
 end
 
 hardened_sysctl = {
@@ -41,13 +41,13 @@ hardened_sysctl = {
   "kernel.grsecurity.tpe_restrict_all" => 0
 }
 
-missing_sysctl_keys = hardened_sysctl.keys - node[:gentoo][:sysctl].keys
+missing_sysctl_keys = hardened_sysctl.keys - node['gentoo']['sysctl'].keys
 
 unless missing_sysctl_keys.empty?
   missing_sysctl_keys.each { |sysctl_key|
     # only set sysctl key if the attribute is present on the system
     if File.exists?("/proc/sys/#{sysctl_key.gsub(".", "/")}")
-      node[:gentoo][:sysctl][sysctl_key] = hardened_sysctl[sysctl_key]
+      node['gentoo']['sysctl'][sysctl_key] = hardened_sysctl[sysctl_key]
     else
       Chef::Log.debug("#{sysctl_key} sysctl key not set.")
     end

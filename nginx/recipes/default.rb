@@ -10,10 +10,10 @@ nginx_modules = [
   "upstream_ip_hash", "userid"
 ]
 
-if %w(yes true on 1).include?(node[:nginx][:fcgi_php].to_s)
+if %w(yes true on 1).include?(node['nginx']['fcgi_php'].to_s)
   nginx_modules << "fastcgi"
 
-  node[:php][:cgi] = true
+  node['php']['cgi'] = true
   include_recipe "php"
 
   gentoo_package_keywords "=www-servers/spawn-fcgi-1.6.3"
@@ -34,13 +34,13 @@ if %w(yes true on 1).include?(node[:nginx][:fcgi_php].to_s)
   end
 end
 
-if %w(yes true on 1).include?(node[:nginx][:passenger].to_s)
+if %w(yes true on 1).include?(node['nginx']['passenger'].to_s)
   nginx_modules << "passenger"
 end
 
-current_modules = (node[:gentoo][:use_expands][:nginx_modules_http] || []).sort
+current_modules = (node['gentoo']['use_expands']['nginx_modules_http'] || []).sort
 unless current_modules == nginx_modules.sort
-  node[:gentoo][:use_expands][:nginx_modules_http] = nginx_modules.sort
+  node['gentoo']['use_expands']['nginx_modules_http'] = nginx_modules.sort
   generate_make_conf "NGINX_MODULES_HTTP changed"
 end
 
@@ -61,10 +61,10 @@ template "/etc/nginx/nginx.conf" do
   group "nginx"
   mode "0640"
   variables(
-    :worker_processes => node[:nginx][:worker_processes],
-    :worker_connections => node[:nginx][:worker_connections],
-    :keepalive_timeout => node[:nginx][:keepalive_timeout],
-    :passenger => node[:nginx][:passenger]
+    :worker_processes => node['nginx']['worker_processes'],
+    :worker_connections => node['nginx']['worker_connections'],
+    :keepalive_timeout => node['nginx']['keepalive_timeout'],
+    :passenger => node['nginx']['passenger']
   )
 end
 
@@ -80,7 +80,7 @@ directory "/var/www" do
   mode "0755"
 end
 
-if %w(yes true on 1).include?(node[:nginx][:fcgi_php].to_s)
+if %w(yes true on 1).include?(node['nginx']['fcgi_php'].to_s)
   service "spawn-fcgi.php" do
     supports :status => true, :restart => true
     action [ :enable, :start ]
@@ -93,8 +93,8 @@ service "nginx" do
   action [ :enable, :start ]
   subscribes :reload, resources(:template => "/etc/nginx/nginx.conf")
   subscribes :restart, resources(:package => "www-servers/nginx")
-  unless node[:ssl][:self_signed_host_cert]
-    subscribes :reload, resources(:cookbook_file => "/etc/ssl/private/#{node[:fqdn]}.pem", :cookbook_file => "/etc/ssl/private/#{node[:fqdn]}.key")
+  unless node['ssl']['self_signed_host_cert']
+    subscribes :reload, resources(:cookbook_file => "/etc/ssl/private/#{node['fqdn']}.pem", :cookbook_file => "/etc/ssl/private/#{node['fqdn']}.key")
   end
 end
 
@@ -110,19 +110,19 @@ end
 
 if node.run_list?("recipe[iptables]")
   iptables_rule "nginx" do
-    variables(:ports => [node[:nginx][:ports]].flatten)
+    variables(:ports => [node['nginx']['ports']].flatten)
   end
 end
 
 if node.run_list?("recipe[monit]")
   monit_check "nginx" do
-    variables(:ports => [node[:nginx][:ports]].flatten)
+    variables(:ports => [node['nginx']['ports']].flatten)
   end
 end
 
 if node.run_list?("recipe[nagios::nrpe]")
   nrpe_command "nginx" do
     # master + workers
-    variables(:processes => 1+node[:nginx][:worker_processes].to_i)
+    variables(:processes => 1+node['nginx']['worker_processes'].to_i)
   end
 end

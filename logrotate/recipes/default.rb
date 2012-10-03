@@ -1,7 +1,7 @@
 include_recipe "gentoo::portage"
 
-unless node[:gentoo][:use_flags].include?("logrotate")
-  node[:gentoo][:use_flags] << "logrotate"
+unless node['gentoo']['use_flags'].include?("logrotate")
+  node['gentoo']['use_flags'] << "logrotate"
   generate_make_conf "added logrotate USE flag"
 end
 

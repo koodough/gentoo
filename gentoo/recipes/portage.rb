@@ -1,7 +1,7 @@
 include_recipe "eix"
 
 link "/etc/make.profile" do
-  to "../../usr/portage/profiles/#{node[:gentoo][:profile]}"
+  to "../../usr/portage/profiles/#{node['gentoo']['profile']}"
 end
 
 generate_make_conf "default"

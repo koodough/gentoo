@@ -17,7 +17,7 @@ unless chef_overlay_reference == current_ref
   end
 end
 
-unless node[:gentoo][:overlay_directories].include?("/usr/local/chef-overlay")
-  node[:gentoo][:overlay_directories] << "/usr/local/chef-overlay"
+unless node['gentoo']['overlay_directories'].include?("/usr/local/chef-overlay")
+  node['gentoo']['overlay_directories'] << "/usr/local/chef-overlay"
   generate_make_conf "added chef-overlay to PORTDIR_OVERLAY"
 end

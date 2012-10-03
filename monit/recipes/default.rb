@@ -14,9 +14,9 @@ template "/etc/monitrc" do
   group "root"
   mode "0600"
   variables(
-    :mailservers => [node[:monit][:mailservers]].flatten,
-    :from => node[:monit][:alert_mail_from],
-    :to => node[:monit][:alert_mail_to]
+    :mailservers => [node['monit']['mailservers']].flatten,
+    :from => node['monit']['alert_mail_from'],
+    :to => node['monit']['alert_mail_to']
   )
 end
 

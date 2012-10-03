@@ -10,10 +10,10 @@ root ALL=(ALL) ALL
 
 <%
 @sudoers_commands.map { |command|
-  if command[:group].to_s =~ /\A\S+\Z/
-    "%#{command[:group]} ALL=#{command[:nopasswd] ? "NOPASSWD:" : "(ALL)"} #{command[:path]}"
-  elsif command[:user].to_s =~ /\A\S+\Z/
-    "#{command[:user]} ALL=#{command[:nopasswd] ? "NOPASSWD:" : "(ALL)"} #{command[:path]}"
+  if command['group'].to_s =~ /\A\S+\Z/
+    "%#{command['group']} ALL=#{command['nopasswd'] ? "NOPASSWD:" : "(ALL)"} #{command['path']}"
+  elsif command['user'].to_s =~ /\A\S+\Z/
+    "#{command['user']} ALL=#{command['nopasswd'] ? "NOPASSWD:" : "(ALL)"} #{command['path']}"
   end
 }.compact.sort.each do |line|
 -%>

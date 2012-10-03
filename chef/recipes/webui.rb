@@ -12,7 +12,7 @@ template "/etc/chef/webui.rb" do
   # TODO chef-webui may be on a different server than the chef-server
   variables(
     :chef_server_fqdn => "localhost",
-    :syslog => node[:chef][:syslog]
+    :syslog => node['chef']['syslog']
   )
 end
 
