@@ -5,10 +5,14 @@ localips = [node['ipaddress']]
 
 hosts = {}
 
-search(:node, "*:*") do |n|
-  unless n['ipaddress'].nil?
-    # TODO ignore RFC 1918 IP addresses on different LANs
-    hosts[n['ipaddress']] = [n['hostname'], n['fqdn'], n['dns_aliases']]
+if Chef::Config[:solo]
+  Chef::Log.warn("This recipe uses search. Chef Solo does not support search.")
+else
+  search(:node, "*:*") do |n|
+    unless n['ipaddress'].nil?
+      # TODO ignore RFC 1918 IP addresses on different LANs
+      hosts[n['ipaddress']] = [n['hostname'], n['fqdn'], n['dns_aliases']]
+    end
   end
 end
 
