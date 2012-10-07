@@ -10,7 +10,7 @@ define :generate_make_conf do
     variables(
       :cflags => node['gentoo']['cflags'],
       :chost => "#{node['kernel']['machine']}-pc-linux-gnu",
-      :cssflags => node['gentoo']['cxxflags'],
+      :cxxflags => node['gentoo']['cxxflags'],
       :distdir => node['gentoo']['distdir'],
       :distfile_mirrors => [node['gentoo']['distfile_mirrors']].flatten,
       :ebeep_ignore => node['gentoo']['ebeep_ignore'],
