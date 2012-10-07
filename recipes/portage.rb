@@ -12,13 +12,19 @@ end
 
 generate_make_conf "default"
 
-directory "/var/log/portage" do
+directory node['gentoo']['port_logdir'] do
   owner "portage"
   group "portage"
   mode "2770"
 end
 
-directory "/var/log/portage/elog" do
+directory "#{node['gentoo']['port_logdir']}/elog" do
+  owner "portage"
+  group "portage"
+  mode "2770"
+end
+
+directory node['gentoo']['pkgdir'] do
   owner "portage"
   group "portage"
   mode "2770"
