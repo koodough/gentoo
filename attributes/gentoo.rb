@@ -17,6 +17,7 @@ default['gentoo']['pkgdir'] = "${PORDDIR}/packages/${ARCH}"
 default['gentoo']['port_logdir'] = "/var/log/portage"
 default['gentoo']['portage_binhost'] = ""
 default['gentoo']['portage_features'] = %w(collision-protect noinfo parallel-fetch preserve-libs sfperms strict unmerge-orphans userpriv usersandbox buildpkg)
+default['gentoo']['portage_niceness'] = 15
 default['gentoo']['portdir'] = "/usr/portage"
 default['gentoo']['profile'] = case node['kernel']['machine']
   when "x86_64"
