@@ -1,16 +1,16 @@
 include_recipe "eix"
 
-link "/etc/make.profile" do
-  to "../../usr/portage/profiles/#{node['gentoo']['profile']}"
-end
-
-generate_make_conf "default"
-
 directory "/etc/portage" do
   owner "root"
   group "portage"
   mode "0770"
 end
+
+link "/etc/portage/make.profile" do
+  to "../../usr/portage/profiles/#{node['gentoo']['profile']}"
+end
+
+generate_make_conf "default"
 
 directory "/var/log/portage" do
   owner "portage"
