@@ -41,9 +41,9 @@ default['gentoo']['sysctl'] = {
 default['gentoo']['timezone'] = "UTC" # "Europe/Budapest"
 default['gentoo']['use_flags'] = [
   "-*", "berkdb", "bzip2", "cracklib", "crypt", "cxx", "fam", "gdbm",
-  "glibc-omitfp", "gnutls", "iconv", "idn", "mmx", "modules", "mudflap",
-  "multilib", "ncurses", "nls", "nptl", "nptlonly", "openmp", "pam",
-  "pcre", "posix", "readline", "ruby", "sse", "sse2", "ssl", "sysfs",
+  "glibc-omitfp", "gnutls", "iconv", "idn", "mmx", "minimal", "modules",
+  "mudflap", "multilib", "ncurses", "nls", "nptl", "nptlonly", "openmp",
+  "pam", "pcre", "posix", "readline", "ruby", "sse", "sse2", "ssl", "sysfs",
   "sysvipc", "threads", "threadsafe", "unicode", "urandom", "xml", "zlib"
 ]
 default['gentoo']['use_expands'] = {}
