@@ -41,7 +41,7 @@ file "/etc/passwd" do
   mode "0644"
 end
 
-file "/etc/shadow"do
+file "/etc/shadow" do
   owner "root"
   group "root"
   mode "0600"
