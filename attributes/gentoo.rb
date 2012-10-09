@@ -1,7 +1,7 @@
 default['gentoo']['accept_licenses'] = ["*"]
 default['gentoo']['cflags'] = "-march=native -O2 -pipe"
-default['gentoo']['cxxflags'] = "${CFLAGS}"
-default['gentoo']['distdir'] = "${PORTDIR}/distfiles"
+default['gentoo']['cxxflags'] = "-march=native -O2 -pipe"
+default['gentoo']['distdir'] = "/usr/portage/distfiles"
 default['gentoo']['distfile_mirrors'] = ["http://gentoo.osuosl.org/"]
 default['gentoo']['ebeep_ignore'] = "yes"
 default['gentoo']['elog_classes'] = %w(warn error log)
@@ -13,7 +13,7 @@ default['gentoo']['hwtimezone'] = "UTC" # "local"
 default['gentoo']['locales'] = ["en_US ISO-8859-1", "en_US.UTF-8 UTF-8"]
 default['gentoo']['makeopts'] = "-j#{(node['cpu']['total'].to_i*2)+1}"
 default['gentoo']['overlay_directories'] = []
-default['gentoo']['pkgdir'] = "${PORTDIR}/packages/${ARCH}"
+default['gentoo']['pkgdir'] = "/usr/portage/packages/amd64"
 default['gentoo']['port_logdir'] = "/var/log/portage"
 default['gentoo']['portage_binhost'] = ""
 default['gentoo']['portage_features'] = %w(collision-protect noinfo parallel-fetch preserve-libs sfperms strict unmerge-orphans userpriv usersandbox buildpkg)

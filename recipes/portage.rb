@@ -24,7 +24,13 @@ directory "#{node['gentoo']['port_logdir']}/elog" do
   mode "2770"
 end
 
-directory node['gentoo']['pkgdir'] do
+directory "/usr/portage/packages" do
+  owner "portage"
+  group "portage"
+  mode "2770"
+end
+
+directory "/usr/portage/packages/amd64" do
   owner "portage"
   group "portage"
   mode "2770"
