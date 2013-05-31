@@ -31,7 +31,8 @@ define :generate_make_conf do
       :rsync_mirror => node['gentoo']['rsync_mirror'],
       :ruby_targets => [node['gentoo']['ruby_targets']].flatten,
       :use_expands => node['gentoo']['use_expands'],
-      :use_flags => node['gentoo']['use_flags']
+      :use_flags => node['gentoo']['use_flags'],
+      :extra_make_conf_variables => node['gentoo']['extra_make_conf_variables']
     )
   end
 end
