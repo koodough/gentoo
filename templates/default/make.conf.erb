@@ -58,7 +58,7 @@ CONFIG_PROTECT_MASK=""
 RUBY_TARGETS="<%= @ruby_targets.sort.uniq.join(" ") %>"
 <% if @extra_make_conf_variables -%>
 <% @extra_make_conf_variables.each do |variable, attributes| -%>
-<%= variable %>="<%= attributes.sort.uniq.join(" ") %>"
+<%= variable %>="<%= attributes %>"
 <% end -%>
 <% end -%>
 
